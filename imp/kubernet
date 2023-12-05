@@ -1,0 +1,96 @@
+(E:\app\venv) E:\app>minikube status
+W1205 02:06:11.565933    4752 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\91897\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+🤷  Profile "minikube" not found. Run "minikube profile list" to view all profiles.
+👉  To start a cluster, run: "minikube start"
+
+(E:\app\venv) E:\app>docker context use default
+default
+Current context is now "default"
+
+(E:\app\venv) E:\app>minikube status
+🤷  Profile "minikube" not found. Run "minikube profile list" to view all profiles.
+👉  To start a cluster, run: "minikube start"
+
+(E:\app\venv) E:\app>docker context ls
+NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT                             KUBERNETES ENDPOINT   ORCHESTRATOR
+default *           moby                Current DOCKER_HOST based configuration   npipe:////./pipe/docker_engine                              
+
+desktop-linux       moby                Docker Desktop                            npipe:////./pipe/dockerDesktopLinuxEngine                   
+
+
+(E:\app\venv) E:\app>docker context use default *     
+accepts 1 arg(s), received 2
+
+(E:\app\venv) E:\app>minikube profile list
+
+🤹  Exiting due to MK_USAGE_NO_PROFILE: No minikube profile was found.
+💡  Suggestion:
+
+    You can create one using 'minikube start'.
+
+
+
+(E:\app\venv) E:\app>minikube start --profile=minikube
+😄  minikube v1.32.0 on Microsoft Windows 11 Home Single Language 10.0.22621.2715 Build 22621.2715
+✨  Automatically selected the docker driver
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.28.3 preload ...
+    > preloaded-images-k8s-v18-v1...:  403.35 MiB / 403.35 MiB  100.00% 12.13 M
+    > gcr.io/k8s-minikube/kicbase...:  453.90 MiB / 453.90 MiB  100.00% 11.56 M
+🔥  Creating docker container (CPUs=2, Memory=4000MB) ...
+🐳  Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+(E:\app\venv) E:\app>minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+(E:\app\venv) E:\app>kubectl run demo --image=docker pull sudhanshu976/kushmanda-tech-internship:latest
+pod/demo created
+
+(E:\app\venv) E:\app>kubectl get po
+NAME   READY   STATUS    RESTARTS      AGE
+demo   1/1     Running   1 (10s ago)   40s
+
+(E:\app\venv) E:\app>kubectl expose pod demo --name=demo --port=80
+service/demo exposed
+
+(E:\app\venv) E:\app>kubect get svc
+'kubect' is not recognized as an internal or external command,
+operable program or batch file.
+
+(E:\app\venv) E:\app>kubectl get svc
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+demo         ClusterIP   10.110.158.92   <none>        80/TCP    24s
+kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP   4m20s
+
+(E:\app\venv) E:\app>kubectl port-forward service/demo 7080:80
+Forwarding from 127.0.0.1:7080 -> 80
+Forwarding from [::1]:7080 -> 80
+Handling connection for 7080
+Handling connection for 7080
+E1205 02:15:26.947608    5156 portforward.go:409] an error occurred forwarding 7080 -> 80: error forwarding port 80 to pod 7afcc755caa0fa586e05820c59df3232c2f2e02bdcd318417dd6b0729a56b879, uid : exit status 1: 2023/12/04 20:45:26 socat[7425] E connect(5, AF=2 127.0.0.1:80, 16): Connection refused
+E1205 02:15:26.947608    5156 portforward.go:409] an error occurred forwarding 7080 -> 80: error forwarding port 80 to pod 7afcc755caa0fa586e05820c59df3232c2f2e02bdcd318417dd6b0729a56b879, uid : exit status 1: 2023/12/04 20:45:26 socat[7426] E connect(5, AF=2 127.0.0.1:80, 16): Connection refused
+error: lost connection to pod
+
+(E:\app\venv) E:\app>kubectl port-forward service/demo 8080:80 
+Forwarding from 127.0.0.1:8080 -> 80
+Handling connection for 8080
+Handling connection for 8080
+E1205 02:18:20.096637    7920 portforward.go:409] an error occurred forwarding 8080 -> 80: error forwarding port 80 to pod 7afcc755caa0fa586e05820c59df3232c2f2e02bdcd318417dd6b0729a56b879, uid : exit status 1: 2023/12/04 20:48:20 socat[9482] E connect(5, AF=2 127.0.0.1:80, 16): Connection refused
+E1205 02:18:20.098082    7920 portforward.go:409] an error occurred forwarding 8080 -> 80: error forwarding port 80 to pod 7afcc755caa0fa586e05820c59df3232c2f2e02bdcd318417dd6b0729a56b879, uid : exit status 1: 2023/12/04 20:48:20 socat[9483] E connect(5, AF=2 127.0.0.1:80, 16): Connection refused
+error: lost connection to pod
