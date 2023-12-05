@@ -72,8 +72,7 @@ This documentation provides a comprehensive guide on the development and deploym
 
 ## Contributors
 
-- [Your Name]
-- [Other contributors, if any]
+- [ SUDHANSHU ]
 
 ## License
 
